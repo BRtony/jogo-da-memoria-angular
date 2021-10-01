@@ -1,26 +1,27 @@
-<mat-toolbar color="primary" class="text-center">
+<mat-toolbar color="primary" class="text-center mat-elevation-z6">
   Jogo da Memória
 </mat-toolbar>
 
 <div class="p-16">
   <p class="text-center">
-    Clique em uma carta para virá-la. Você só pode virar duas cartas por vez.<br> Ao encontrar o par, as cartas serão removidas.
+    Clique em uma carta para virá-la. Você só pode virar duas cartas por vez.<br> Ao encontrar o par, as cartas serão
+    removidas.
   </p>
-     <!-- tela inicial -->
-     <div class="principal" *ngIf="showInicio">
-      <button mat-raised-button color="primary"
-         (click)="setupCards()">
-         Fácil
-     </button>
-      <button mat-raised-button color="primary"
-         (click)="setupCardsMedio()">
-         Médio
-    </button>
-      <button mat-raised-button color="primary"
-         (click)="setupCardsHard()">
-         Difícil
-  </button>
-    </div><!-- fim tela inicial -->
+  <!-- tela inicial -->
+  <div class="principal" *ngIf="showInicio">
+    <mat-button-toggle-group name="favoriteColor" aria-label="Favorite Color">
+      <mat-button-toggle value="Fácil" color="primary" (click)="setupCards()">
+        Fácil
+      </mat-button-toggle>
+      <mat-button-toggle value="Médio" color="primary" (click)="setupCardsMedio()">
+        Médio
+      </mat-button-toggle>
+      <mat-button-toggle value="Difícil" color="primary" (click)="setupCardsHard()">
+        Difícil
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+  <!-- fim tela inicial -->
 
   <div class="grid p-16">
     <!-- Estamos usando a diretiva *ngFor aqui para percorrer nosso array de cartões e criar

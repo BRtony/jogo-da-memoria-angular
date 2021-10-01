@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog'
 import { CardData } from './card-model';
 import { RestartDialogComponent } from './restart-dialog';
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -255,7 +254,15 @@ export class AppComponent implements OnInit{
    */
   restart(): void {
     this.matchedCount = 0;
-    this.showInicio();
+    if(this.inUseF){
+    this.setupCards();
+    } else if (this.inUseM){
+    this.setupCardsMedio();
+    } else if (this.inUseH){
+    this.setupCardsHard();
+    } else {
+      this.showInicio();
+    }
   }
 
 
