@@ -1,10 +1,145 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog'
+import { CardData } from './card-model';
+import { RestartDialogComponent } from './restart-dialog';
+
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
-  title = 'jogo-da-memoria';
+export class AppComponent implements OnInit{
+  cardImages = [
+    'GubApA69UZM',
+    // 'sB1iOml907A',
+    // '5UQLWAUS_6c',
+    // 'sHGMUBA88Mc',
+    // '_XdTZMuCXRM',
+  ];
+  cards: CardData[] = [];
+
+  flippedCards: CardData[] = [];
+
+  matchedCount = 0;
+
+
+  /**
+   * Converte em um array de arrays, com um número aleatório como primeiro membro e o objeto
+   *  CardData como o segundo membro
+   * 
+   * Embaralha o array com base no primeiro membro, resultando em uma classificação aleatória
+   * 
+   * Converte de volta em um array do segundo membro que é o objeto CardData
+   * @param anArray um array de cartas embaralhadas
+   * @returns retorna o Array com cartas
+   */
+  shuffleArray(anArray: any[]): any[] {
+    return anArray.map(a => [Math.random(), a])
+      .sort((a, b) => a[0] - b[0])
+      .map(a => a[1]);
+  }
+  constructor(private dialog: MatDialog) {
+
+  }
+
+  ngOnInit(): void {
+    this.setupCards();
+  }
+
+  /**
+   * A função setupCards 
+   * percorre nossos IDs de imagem, 
+   * cria um objeto CardData para cada um e, 
+   * em seguida, envia duas cópias do objeto 
+   * para nosso array de cartões
+   * 
+   * @returns duas cópias de cada imagem ao objeto
+   */
+
+
+  /**
+   * O operador @spread (...) é importante aqui, porque queremos novos objetos com os mesmos 
+   * dados, não cópias por referência. Em cópias por referência, quando mudamos o estado de uma * das cartas, ele também mudará o estado de seu par!
+   */
+
+  setupCards(): void {
+    this.cards = [];
+
+    this.cardImages.forEach((image) => {
+      const cardData: CardData = {
+        imageId: image,
+        state: 'default',
+      };
+      this.cards.push({ ...cardData });
+      this.cards.push({ ...cardData });
+    });
+
+    this.cards = this.shuffleArray(this.cards);
+  }
+
+  /**
+   * Primeiro alternamos o estado do cartão com base em seu estado atual. Se for 'default', mudamos para 'flipped' e vice versa.
+   * Também mantemos um array chamado flippedCards para guardar as cartas que estão no estado 
+   * invertido. Usaremos isso para verificar se há match. 
+   * 
+   * Por último evita-se a virada de mais de 2 cartas ao mesmo tempo. Para proibir isso,
+   * adicionamos uma verificação extra no comprimento dos flippedCards. Isso desabilitará 
+   * a mudança de estado se o usuário tocar em mais de 2 (> 2) cards consecutivamente.
+   * @param index o índice no array de cartas
+   */
+  cardClicked(index: number): void {
+    const cardInfo = this.cards[index];
+
+    if (cardInfo.state === 'default' && this.flippedCards.length < 2) {
+      cardInfo.state = 'flipped';
+      this.flippedCards.push(cardInfo);
+
+      if (this.flippedCards.length > 1) {
+        this.checkForCardMatch();
+      }
+
+    } else if (cardInfo.state === 'flipped') {
+      cardInfo.state = 'default';
+      this.flippedCards.pop();
+
+    }
+  }
+
+  
+
+  checkForCardMatch(): void {
+    setTimeout(() => {
+      const cardOne = this.flippedCards[0];
+      const cardTwo = this.flippedCards[1];
+      const nextState = cardOne.imageId === cardTwo.imageId ? 'matched' : 'default';
+      cardOne.state = cardTwo.state = nextState;
+
+      this.flippedCards = [];
+
+      if (nextState === 'matched') {
+        this.matchedCount++;
+
+        if (this.matchedCount === this.cardImages.length) {
+          const dialogRef = this.dialog.open(RestartDialogComponent, {
+            disableClose: true
+          });
+
+          dialogRef.afterClosed().subscribe(() => {
+            this.restart();
+          });
+        }
+      }
+
+    }, 1000);
+  }
+
+  restart(): void {
+    this.matchedCount = 0;
+    this.setupCards();
+  }
+
+
+  
+  
 }

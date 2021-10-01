@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Play:wght@700&display=swap');
+
+.textcenter {
+    text-align: center;
+    font-family: 'Play', sans-serif;
+    
+}
+.par {
+    font-size: 1.5rem;
+}
+.mat-dialog-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.mat-dialog-content {
+    display: flex;
+    padding: 10px 20px;
+    overflow: hidden;
+}
+.mat-dialog-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
