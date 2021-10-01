@@ -44,11 +44,14 @@ import { CardData } from '../card-model'
   ]
 })
 
-
+/**
+ * A interface do jogo. Aqui são passados input e output,
+ * ou seja, o que será inserido e o que é retornado
+ */
 export class GameCardComponent implements OnInit {
-  @Input() data: CardData;
+  @Input() data: CardData; // passando cartas como input seguindo o model
   
-  @Output() cardClicked = new EventEmitter();
+  @Output() cardClicked = new EventEmitter(); 
   
   constructor() { }
   

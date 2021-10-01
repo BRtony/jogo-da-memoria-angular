@@ -10,9 +10,14 @@ import { RestartDialogComponent } from './restart-dialog';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit{
-    inUseF: boolean
-    inUseM: boolean
-    inUseH: boolean
+    private inUseF: boolean
+    private inUseM: boolean
+    private inUseH: boolean
+
+    /**
+     * Os arrays @cardImages armazena as strings @imageId 
+     */
+     
   cardImages = [
     '564x/1b/e6/92/1be69269b718b0885efa99c180ed4ac7.jpg',
     '564x/02/ce/41/02ce41e3c7184ddb85b45e44e5d73103.jpg',
@@ -41,28 +46,13 @@ export class AppComponent implements OnInit{
     '564x/f8/f5/ae/f8f5aeacec2defd58e6d370362b939b6.jpg',
     '564x/4f/92/c7/4f92c76cbc9bf127ce1f3783b1974673.jpg',
   ];
+
   cards: CardData[] = [];
 
   flippedCards: CardData[] = [];
 
   matchedCount = 0;
 
-
-  /**
-   * Converte em um array de arrays, com um número aleatório como primeiro membro e o objeto
-   *  CardData como o segundo membro
-   * 
-   * Embaralha o array com base no primeiro membro, resultando em uma classificação aleatória
-   * 
-   * Converte de volta em um array do segundo membro que é o objeto CardData
-   * @param anArray um array de cartas embaralhadas
-   * @returns retorna o Array com cartas
-   */
-  shuffleArray(anArray: any[]): any[] {
-    return anArray.map(a => [Math.random(), a])
-      .sort((a, b) => a[0] - b[0])
-      .map(a => a[1]);
-  }
   constructor(private dialog: MatDialog) {
 
   }
@@ -75,26 +65,41 @@ export class AppComponent implements OnInit{
   }
 
   /**
-   * A função setupCards 
-   * percorre nossos IDs de imagem, 
-   * cria um objeto CardData para cada um e, 
-   * em seguida, envia duas cópias do objeto 
-   * para nosso array de cartões
+   * Converte em um array de arrays, com um número aleatório como primeiro membro e o objeto
+   *  CardData como o segundo membro
    * 
-   * @returns duas cópias de cada imagem ao objeto
+   * Embaralha o array com base no primeiro membro, resultando em uma classificação aleatória
+   * 
+   * Converte de volta em um array do segundo membro que é o objeto CardData
+   * @param anArray um array de cartas embaralhadas
+   * @returns retorna o Array com cartas
    */
-
+   shuffleArray(anArray: any[]): any[] {
+    return anArray.map(a => [Math.random(), a])
+      .sort((a, b) => a[0] - b[0])
+      .map(a => a[1]);
+  }
 
   /**
-   * O operador @spread (...) é importante aqui, porque queremos novos objetos com os mesmos 
-   * dados, não cópias por referência. Em cópias por referência, quando mudamos o estado de uma * das cartas, ele também mudará o estado de seu par!
+   * A função setupCards percorre nossos IDs de imagem, 
+   * cria um objeto CardData para cada um e, em seguida,
+   * envia duas cópias do objeto para nosso array de cartões
+   * 
+   * @returns duas cópias de cada imagem e
+   * retorna se o método foi iniciado (inUseF = true)
+   * 
+   * O operador @spread (...) é importante aqui, 
+   * porque queremos novos objetos com os mesmos 
+   * dados, não cópias por referência. Em cópias
+   * por referência, quando mudamos o estado de
+   * uma das cartas, ele também mudará o estado de seu par.
    */
 
   setupCards(): boolean {
     this.inUseF = false
     this.inUseM = false
     this.inUseH = false
-    this.matchedCount = 0;
+    this.matchedCount = 0; // contador de pares zerado
     this.cards = [];
 
     this.cardImages.forEach((image) => {
@@ -178,7 +183,25 @@ export class AppComponent implements OnInit{
     }
   }
 
-  
+  /**
+   * Assim que uma carta é virada e o flippedCards tem um length de 2,
+   * usamos essas informações para verificar se as cartas formam um par.
+   * 
+   * Primeiro, descobrimos qual deve ser o próximo estado das cartas
+   * com base no fato de seu imageId ser igual ou não. Se eles corresponderem,
+   * definimos como um par (matched). Caso contrário, nós os redefinimos para o padrão (default).
+   * 
+   * Em seguida, colocamos as duas cartas no estado acima, acionando suas animações. No caso de 
+   * 'matched', as cartas desaparecem no cosmos. Caso contrário, elas voltam 
+   * para suas posições 'default' para que o usuário possa selecionar duas outras cartas.
+   * Também redefinimos os flippedCards para vazio.
+   * 
+   * Por último, precisamos verificar quando todas as cartas foram combinadas. 
+   * Para isso, simplesmente mantemos um contador chamado matchedCount e o
+   * incrementamos quando houver um match. Assim que o matchedCount
+   * for igual ao número de imagens que temos, mostramos um modal do angular/material
+   * parabenizando o usuário e permitindo que ele volte à tela inicial para escolher um novo jogo.
+   */
 
   checkForCardMatch(): void {
     setTimeout(() => {
@@ -223,6 +246,13 @@ export class AppComponent implements OnInit{
     }, 1000);
   }
 
+
+  /**
+   * Com nosso jogo da memória totalmente funcional,
+   * a última coisa que precisamos fazer é permitir que 
+   * o usuário reinicie o jogo. Podemos simplesmente chamar nossa 
+   * função showInicio e redefinir o matchedCount para 0.
+   */
   restart(): void {
     this.matchedCount = 0;
     this.showInicio();
