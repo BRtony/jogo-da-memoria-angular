@@ -10,12 +10,29 @@ import { RestartDialogComponent } from './restart-dialog';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit{
+    inUseF: boolean
+    inUseM: boolean
+    inUseH: boolean
   cardImages = [
-    'GubApA69UZM',
-    // 'sB1iOml907A',
+    '564x/42/19/8c/42198cf4fe33a5ea7714735f4b67cb30.jpg',
+    // '564x/35/dc/ca/35dccaabebccbecd9880fbeb21dc7362.jpg',
     // '5UQLWAUS_6c',
     // 'sHGMUBA88Mc',
     // '_XdTZMuCXRM',
+  ];
+  cardImagesMedio = [
+    // '564x/c6/1f/d0/c61fd03c7cfe93754d4d69b6e76616a0.jpg',
+    // '236x/56/36/c8/5636c83ba30560b09704560188fe26b3.jpg',
+    '564x/48/27/71/482771345c8ecbeb6d6ccaf3e66760f3.jpg',
+    '236x/21/70/3a/21703a31d8693986a5234e66dd512503.jpg',
+    '564x/ec/62/b0/ec62b02a41eef77fbbf65a4f5805d10a.jpg',
+  ];
+  cardImagesHard = [
+    'GubApA69UZM',
+    'sB1iOml907A',
+    '5UQLWAUS_6c',
+    'sHGMUBA88Mc',
+    '_XdTZMuCXRM',
   ];
   cards: CardData[] = [];
 
@@ -44,7 +61,10 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.setupCards();
+    this.showInicio();
+  }
+
+  showInicio():void {
   }
 
   /**
@@ -63,7 +83,11 @@ export class AppComponent implements OnInit{
    * dados, não cópias por referência. Em cópias por referência, quando mudamos o estado de uma * das cartas, ele também mudará o estado de seu par!
    */
 
-  setupCards(): void {
+  setupCards(): boolean {
+    this.inUseF = false
+    this.inUseM = false
+    this.inUseH = false
+    this.matchedCount = 0;
     this.cards = [];
 
     this.cardImages.forEach((image) => {
@@ -75,8 +99,49 @@ export class AppComponent implements OnInit{
       this.cards.push({ ...cardData });
     });
 
-    this.cards = this.shuffleArray(this.cards);
+    this.cards = this.shuffleArray(this.cards)
+    return this.inUseF = true
   }
+  setupCardsMedio(): boolean {
+    this.inUseF = false
+    this.inUseM = false
+    this.inUseH = false
+    this.matchedCount = 0;
+    this.cards = [];
+    
+
+    this.cardImagesMedio.forEach((image) => {
+      const cardData: CardData = {
+        imageId: image,
+        state: 'default',
+      };
+      this.cards.push({ ...cardData });
+      this.cards.push({ ...cardData });
+    });
+
+    this.cards = this.shuffleArray(this.cards);
+    return this.inUseM = true
+}
+  setupCardsHard(): boolean {
+    this.inUseF = false
+    this.inUseM = false
+    this.inUseH = false
+    this.matchedCount = 0;
+    this.cards = [];
+
+    this.cardImagesHard.forEach((image) => {
+      const cardData: CardData = {
+        imageId: image,
+        state: 'default',
+      };
+      this.cards.push({ ...cardData });
+      this.cards.push({ ...cardData });
+    });
+
+    this.cards = this.shuffleArray(this.cards);
+
+    return this.inUseH = true    
+}
 
   /**
    * Primeiro alternamos o estado do cartão com base em seu estado atual. Se for 'default', mudamos para 'flipped' e vice versa.
@@ -120,7 +185,25 @@ export class AppComponent implements OnInit{
       if (nextState === 'matched') {
         this.matchedCount++;
 
-        if (this.matchedCount === this.cardImages.length) {
+        if (this.inUseF && this.matchedCount === this.cardImages.length) {
+          const dialogRef = this.dialog.open(RestartDialogComponent, {
+            disableClose: true
+          });
+
+          dialogRef.afterClosed().subscribe(() => {
+            this.restart();
+          });
+        } 
+        if (this.inUseM && this.matchedCount === this.cardImagesMedio.length) {
+          const dialogRef = this.dialog.open(RestartDialogComponent, {
+            disableClose: true
+          });
+
+          dialogRef.afterClosed().subscribe(() => {
+            this.restart();
+          });
+        }
+        if (this.inUseH && this.matchedCount === this.cardImagesHard.length) {
           const dialogRef = this.dialog.open(RestartDialogComponent, {
             disableClose: true
           });
@@ -130,7 +213,6 @@ export class AppComponent implements OnInit{
           });
         }
       }
-
     }, 1000);
   }
 

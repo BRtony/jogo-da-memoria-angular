@@ -6,6 +6,25 @@
   <p class="text-center">
     Clique em uma carta para virá-la. Você só pode virar duas cartas por vez.<br> Ao encontrar o par, as cartas serão removidas.
   </p>
+     <!-- tela inicial -->
+     <div class="principal" *ngIf="showInicio">
+      <a href="#" 
+         class="botao"
+         (click)="setupCards()">
+         Fácil
+      </a>
+      <a href="#" 
+         class="botao"
+         (click)="setupCardsMedio()">
+         Médio
+      </a>
+      <a href="#" 
+         class="botao"
+         (click)="setupCardsHard()">
+         Difícil
+      </a>
+    </div><!-- fim tela inicial -->
+
   <div class="grid p-16">
     <!-- Estamos usando a diretiva *ngFor aqui para percorrer nosso array de cartões e criar
        muitos componentes de cartão de jogo no processo. Para cada um deles, enviamos o objeto

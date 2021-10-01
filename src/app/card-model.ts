@@ -6,4 +6,7 @@
 export interface CardData {
     imageId: string;
     state: 'default' | 'flipped' | 'matched';
+    inUseF?: boolean
+    inUseM?: boolean
+    inUseH?: boolean
 }
