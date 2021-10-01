@@ -8,21 +8,18 @@
   </p>
      <!-- tela inicial -->
      <div class="principal" *ngIf="showInicio">
-      <a href="#" 
-         class="botao"
+      <button mat-raised-button color="primary"
          (click)="setupCards()">
          Fácil
-      </a>
-      <a href="#" 
-         class="botao"
+     </button>
+      <button mat-raised-button color="primary"
          (click)="setupCardsMedio()">
          Médio
-      </a>
-      <a href="#" 
-         class="botao"
+    </button>
+      <button mat-raised-button color="primary"
          (click)="setupCardsHard()">
          Difícil
-      </a>
+  </button>
     </div><!-- fim tela inicial -->
 
   <div class="grid p-16">

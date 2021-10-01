@@ -22,3 +22,10 @@
     font-family: 'Play', sans-serif;
 
 }
+button {
+    margin: 10px;
+    font-size: 1.3rem;
+    padding: 5px 15px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px #683ab74f;
+}
