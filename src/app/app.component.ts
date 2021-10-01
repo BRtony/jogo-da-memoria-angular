@@ -14,7 +14,7 @@ export class AppComponent implements OnInit{
     private inUseH: boolean
 
     /**
-     * Os arrays @cardImages armazena as strings @imageId 
+     * Os arrays @cardImages armazenam as strings @imageId 
      */
      
   cardImages = [
