@@ -1,31 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Play:wght@700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Play:wght@700&display=swap");
 .grid {
-    /* display: grid;
-    grid-template-columns: repeat(5, 200px); */
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: space-around;
-    padding-bottom: 50px;
-    
+  display: grid;
+  grid-template-columns: repeat(5, 200px);
+  grid-template-rows: repeat(5, 300px);
+  gap: 50px;
+  grid-auto-flow: dense;
+  justify-content: center;
+  align-content: center;
 }
 
-
 .p-16 {
-    margin: 50px;
-    text-align: center;
-    font-size: 2rem;
-    line-height: normal;
+  margin: 50px;
+  text-align: center;
+  font-size: 2rem;
+  line-height: normal;
 }
 
 .text-center {
-    font-family: 'Play', sans-serif;
-
+  font-family: "Play", sans-serif;
 }
 button {
-    margin: 10px;
-    font-size: 1.3rem;
-    padding: 5px 15px;
-    border-radius: 10px;
-    box-shadow: 5px 5px 5px #683ab74f;
+  margin: 10px;
+  font-size: 1.3rem;
+  padding: 5px 15px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px #683ab74f;
 }
